@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const { String, Number } = mongoose.Schema.Types;
 
@@ -24,5 +24,6 @@ const ProductSchema = new mongoose.Schema({
     required: true
   }
 });
-const Product = mongoose.model('Product', ProductSchema);
-module.exports = Product;
+
+
+export default mongoose.models.Product || mongoose.model('Product', ProductSchema);
