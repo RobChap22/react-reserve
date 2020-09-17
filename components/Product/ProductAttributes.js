@@ -1,4 +1,4 @@
-import { Header, Button } from 'semantic-ui-react';
+import { Header, Button, Modal } from 'semantic-ui-react';
 
 function ProductAttributes({ description }) {
   return <>
@@ -9,6 +9,10 @@ function ProductAttributes({ description }) {
       color='red'
       content='Delete Product'
     />
+    <Modal open={true} dimmer='blurring'>
+      <Modal.Header>
+      </Modal.Header>
+    </Modal>
   </>;
 }
 
