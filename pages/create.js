@@ -15,6 +15,7 @@ function CreateProduct() {
   const [product, setProduct] = React.useState(INITIAL_PRODUCT);
   const [mediaPreview, setMediaPreview] = React.useState('');
   const [success, setSuccess] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   function handleChange(e) {
     const { name, value, files } = e.target;
@@ -38,13 +39,16 @@ function CreateProduct() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
     const mediaUrl = await handleImageUpload();
     console.log({mediaUrl});
-    // const url = `${baseUrl}/api/product`;
-    // const { name, price, description } = product;
-    // const payload = { name, price, description, mediaUrl}
-    // // const payload = { ...product, mediaUrl} this is the same way as doing it without extra steps
-    // await axios.post(url, payload)
+    const url = `${baseUrl}/api/product`;
+    const { name, price, description } = product;
+    const payload = { name, price, description, mediaUrl};
+    // const payload = { ...product, mediaUrl} this is the same way as doing it without extra steps
+    const response = await axios.post(url, payload);
+    console.log({response});
+    setLoading(false);
     setProduct(INITIAL_PRODUCT);
     setSuccess(true);
   }
@@ -56,7 +60,7 @@ function CreateProduct() {
         <Icon name="add" color="orange" />
         Create New Product
       </Header>
-      <Form onSubmit={handleSubmit} success={success} >
+      <Form onSubmit={handleSubmit} success={success} loading={loading} >
         <Message
           success
           icon="check"
@@ -109,6 +113,7 @@ function CreateProduct() {
           color="blue"
           icon="pencil alternate"
           content="Submit"
+          disabled={loading}
         />
       </Form>
     </>
