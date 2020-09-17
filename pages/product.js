@@ -13,12 +13,15 @@ function Product({ product }) {
   );
 }
 
-Product.getInitialProps = async ({ query }) => {
+Product.getInitialProps = async ({ query: { _id } }) => {
   // the query here comes from the url
-  const url = `${baseUrl}/api/product?_id=${query._id}`;
-  // const payload = { params: {query._id} };
-  const response = await axios.get(url);
+  const url = `${baseUrl}/api/product`;
+  const payload = { params: { _id } };
+  const response = await axios.get(url, payload);
   return { product: response.data };
 }
 
 export default Product;
+
+
+// ?_id=${query._id}
