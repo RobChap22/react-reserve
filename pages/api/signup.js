@@ -36,7 +36,6 @@ export default async (req, res) => {
 
     // await newUser.save()
 
-    console.log({newUser});
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '3d' })
     res.status(201).json(token);
   } catch (error) {
