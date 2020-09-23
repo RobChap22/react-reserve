@@ -1,5 +1,5 @@
-import Product from '../../models/Product';
-import connectDb from '../../utils/connectDb';
+import Product from "../../models/Product";
+import connectDb from "../../utils/connectDb";
 
 connectDb();
 
@@ -15,10 +15,10 @@ export default async (req, res) => {
       await handleDeleteRequest(req, res);
       break;
     default:
-      res.status(405).send(`Method ${req.method} not allowed.`);
+      res.status(405).send(`Method ${req.method} not allowed`);
       break;
   }
-}
+};
 
 async function handleGetRequest(req, res) {
   const { _id } = req.query;
@@ -30,7 +30,7 @@ async function handlePostRequest(req, res) {
   const { name, price, description, mediaUrl } = req.body;
   try {
     if (!name || !price || !description || !mediaUrl) {
-      return res.status(422).send("Missing fields!");
+      return res.status(422).send("Product missing one or more fields");
     }
     const product = await new Product({
       name,
@@ -39,9 +39,9 @@ async function handlePostRequest(req, res) {
       mediaUrl
     }).save();
     res.status(201).json(product);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
-    res.status(500).send("Server error creating product");
+    res.status(500).send("Server error in creating product");
   }
 }
 
@@ -50,4 +50,3 @@ async function handleDeleteRequest(req, res) {
   await Product.findOneAndDelete({ _id });
   res.status(204).json({});
 }
-

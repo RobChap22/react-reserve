@@ -1,34 +1,42 @@
-import { Form, Input, TextArea, Button, Image, Message, Header, Icon } from 'semantic-ui-react';
-import React from 'react';
-import axios from 'axios';
-import baseUrl from '../utils/baseUrl';
-import catchErrors from '../utils/catchErrors';
-
+import React from "react";
+import {
+  Form,
+  Input,
+  TextArea,
+  Button,
+  Image,
+  Message,
+  Header,
+  Icon
+} from "semantic-ui-react";
+import axios from "axios";
+import baseUrl from "../utils/baseUrl";
+import catchErrors from "../utils/catchErrors";
 
 const INITIAL_PRODUCT = {
-    name: "",
-    price: "",
-    media: "",
-    description: ""
-  };
+  name: "",
+  price: "",
+  media: "",
+  description: ""
+};
 
 function CreateProduct() {
   const [product, setProduct] = React.useState(INITIAL_PRODUCT);
-  const [mediaPreview, setMediaPreview] = React.useState('');
+  const [mediaPreview, setMediaPreview] = React.useState("");
   const [success, setSuccess] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [disabled, setDisabled] = React.useState(true);
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState("");
 
   React.useEffect(() => {
-    const isProduct = Object.values(product).every(value => Boolean(value));
+    const isProduct = Object.values(product).every(el => Boolean(el));
     isProduct ? setDisabled(false) : setDisabled(true);
-  }, [product])
+  }, [product]);
 
-  function handleChange(e) {
-    const { name, value, files } = e.target;
+  function handleChange(event) {
+    const { name, value, files } = event.target;
     if (name === "media") {
-      setProduct(prevState => ({...prevState, media: files[0]}));
+      setProduct(prevState => ({ ...prevState, media: files[0] }));
       setMediaPreview(window.URL.createObjectURL(files[0]));
     } else {
       setProduct(prevState => ({ ...prevState, [name]: value }));
@@ -37,9 +45,9 @@ function CreateProduct() {
 
   async function handleImageUpload() {
     const data = new FormData();
-    data.append('file', product.media);
-    data.append('upload_preset', 'reactreserve');
-    data.append('cloud_name', 'duktqsckm');
+    data.append("file", product.media);
+    data.append("upload_preset", "reactreserve");
+    data.append("cloud_name", "reedbargercodes");
     const response = await axios.post(process.env.CLOUDINARY_URL, data);
     const mediaUrl = response.data.url;
     return mediaUrl;
@@ -49,23 +57,21 @@ function CreateProduct() {
     try {
       event.preventDefault();
       setLoading(true);
-      setError('');
+      setError("");
       const mediaUrl = await handleImageUpload();
       const url = `${baseUrl}/api/product`;
       const { name, price, description } = product;
-      const payload = { name, price, description, mediaUrl};
-      // const payload = { ...product, mediaUrl} this is the same way as doing it without extra steps
+      const payload = { name, price, description, mediaUrl };
       const response = await axios.post(url, payload);
-      console.log({response});
+      console.log({ response });
       setProduct(INITIAL_PRODUCT);
       setSuccess(true);
-    } catch(error) {
+    } catch (error) {
       catchErrors(error, setError);
     } finally {
       setLoading(false);
     }
   }
-
 
   return (
     <>
@@ -73,65 +79,65 @@ function CreateProduct() {
         <Icon name="add" color="orange" />
         Create New Product
       </Header>
-      <Form onSubmit={handleSubmit} success={success} loading={loading} error={Boolean(error)} >
+      <Form
+        loading={loading}
+        error={Boolean(error)}
+        success={success}
+        onSubmit={handleSubmit}
+      >
+        <Message error header="Oops!" content={error} />
         <Message
           success
           icon="check"
           header="Success!"
-          content="Your product has been posted."
+          content="Your product has been posted"
         />
-        <Message
-          error
-          header="Wah-wa"
-          content={error}
-        />
-        <Form.Group widths="equal" >
+        <Form.Group widths="equal">
           <Form.Field
             control={Input}
             name="name"
-            type="text"
             label="Name"
             placeholder="Name"
-            onChange={handleChange}
             value={product.name}
+            onChange={handleChange}
           />
           <Form.Field
             control={Input}
             name="price"
-            type="number"
             label="Price"
             placeholder="Price"
             min="0.00"
             step="0.01"
-            onChange={handleChange}
+            type="number"
             value={product.price}
+            onChange={handleChange}
           />
           <Form.Field
             control={Input}
             name="media"
             type="file"
-            accept="image/*"
             label="Media"
+            accept="image/*"
             content="Select Image"
             onChange={handleChange}
           />
         </Form.Group>
         <Image src={mediaPreview} rounded centered size="small" />
         <Form.Field
-            control={TextArea}
-            name="description"
-            label="Description"
-            placeholder="Description"
-            onChange={handleChange}
-            value={product.description}
+          control={TextArea}
+          name="description"
+          label="Description"
+          placeholder="Description"
+          onChange={handleChange}
+          value={product.description}
         />
         <Form.Field
           control={Button}
-          type="submit"
+          disabled={disabled || loading}
           color="blue"
           icon="pencil alternate"
           content="Submit"
-          disabled={disabled || loading}
+          type="submit"
         />
       </Form>
     </>

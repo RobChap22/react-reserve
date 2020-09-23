@@ -1,11 +1,9 @@
 import App from "next/app";
-import axios from 'axios';
-import { parseCookies } from 'nookies';
-import Layout from '../components/_App/Layout';
-import { redirectUser } from '../utils/auth';
-import baseUrl from '../utils/baseUrl';
-
-
+import Layout from "../components/_App/Layout";
+import { parseCookies } from "nookies";
+import { redirectUser } from "../utils/auth";
+import baseUrl from "../utils/baseUrl";
+import axios from "axios";
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
@@ -18,14 +16,15 @@ class MyApp extends App {
     }
 
     if (!token) {
-      const isProtectedRoute = cxt.pathname === '/account' || cxt.pathname === '/create'
+      const isProtectedRoute =
+        ctx.pathname === "/account" || ctx.pathname === "/create";
       if (isProtectedRoute) {
-        redirectUser(ctx, '/login');
+        redirectUser(ctx, "/login");
       }
     } else {
       try {
-        const url = `${baseUrl}/api/account`;
         const payload = { headers: { Authorization: token } };
+        const url = `${baseUrl}/api/account`;
         const response = await axios.get(url, payload);
         const user = response.data;
         pageProps.user = user;
@@ -37,11 +36,10 @@ class MyApp extends App {
     return { pageProps };
   }
 
-
   render() {
     const { Component, pageProps } = this.props;
     return (
-      <Layout {...pageProps} >
+      <Layout {...pageProps}>
         <Component {...pageProps} />
       </Layout>
     );

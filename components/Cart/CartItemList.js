@@ -1,8 +1,7 @@
-import { Header, Segment, Button, Icon } from 'semantic-ui-react';
-
+import { Header, Segment, Button, Icon } from "semantic-ui-react";
 
 function CartItemList() {
-  const user = true;
+  const user = false;
 
   return (
     <Segment secondary color="teal" inverted textAlign="center" placeholder>
@@ -12,9 +11,9 @@ function CartItemList() {
       </Header>
       <div>
         {user ? (
-          <Button color="orange">View products</Button>
+          <Button color="orange">View Products</Button>
         ) : (
-          <Button color="blue">Login to view Products</Button>
+          <Button color="blue">Login to Add Products</Button>
         )}
       </div>
     </Segment>
