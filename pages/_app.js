@@ -44,6 +44,17 @@ class MyApp extends App {
     return { pageProps };
   }
 
+  componentDidMount() {
+    window.addEventListener('storage', this.syncLogout);
+  }
+
+  syncLogout = event => {
+    if (event.key === 'logout') {
+      console.log('logged out from storage');
+      Router.push('/login');
+    }
+  }
+
   render() {
     const { Component, pageProps } = this.props;
     return (
