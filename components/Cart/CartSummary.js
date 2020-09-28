@@ -1,8 +1,9 @@
 import { Button, Segment, Divider } from "semantic-ui-react";
 import React from 'react';
 import calculateCartTotal from '../../utils/calculateCartTotal';
+import StripeCheckout from 'react-stripe-checkout';
 
-function CartSummary({ products }) {
+function CartSummary({ products, handleCheckout, success }) {
   const [isCartEmpty, setCartEmpty] = React.useState(false);
   const [cartAmount, setCartAmount] = React.useState(0);
   const [stripeAmount, setStripeAmount] = React.useState(0);
@@ -19,7 +20,26 @@ function CartSummary({ products }) {
       <Divider />
       <Segment clearing size="large">
         <strong>Sub total:</strong> ${cartAmount}
-        <Button disabled={isCartEmpty} icon="cart" color="teal" floated="right" content="Checkout" />
+        <StripeCheckout
+          name="React Reserve"
+          amount={stripeAmount}
+          image={products.length > 0 ? products[0].product.mediaUrl : ""}
+          currency="USD"
+          shippingAddress={true}
+          billingAddress={true}
+          zipCode={true}
+          token={handleCheckout}
+          stripeKey="pk_test_51HWAacD80Qg28FJ9b20MS9R9E5YOg4nDfZxoeQQPdWRoacZtY19DFtfHYamC2qbXfs4JoKPNq52DUS77g8snRfbb00juQUvrJl"
+          triggerEvent="onClick"
+        >
+          <Button
+            disabled={isCartEmpty || success}
+            icon="cart"
+            color="teal"
+            floated="right"
+            content="Checkout"
+          />
+        </StripeCheckout>
       </Segment>
     </>
   );
