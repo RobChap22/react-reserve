@@ -26,8 +26,8 @@ const OrderSchema = new mongoose.Schema({
   total: {
     type: Number,
     required: true
-  }, {
-    timestamps: true
+  },
+  timestamps: true
   }
 });
 
