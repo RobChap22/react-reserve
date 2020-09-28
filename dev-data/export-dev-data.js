@@ -33,3 +33,4 @@ const importData = async () => {
 if (process.argv[2] === '--import') {
   importData();
 }
+
