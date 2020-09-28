@@ -1,19 +1,19 @@
+import React from "react";
+import StripeCheckout from "react-stripe-checkout";
 import { Button, Segment, Divider } from "semantic-ui-react";
-import React from 'react';
-import calculateCartTotal from '../../utils/calculateCartTotal';
-import StripeCheckout from 'react-stripe-checkout';
+import calculateCartTotal from "../../utils/calculateCartTotal";
 
 function CartSummary({ products, handleCheckout, success }) {
-  const [isCartEmpty, setCartEmpty] = React.useState(false);
   const [cartAmount, setCartAmount] = React.useState(0);
   const [stripeAmount, setStripeAmount] = React.useState(0);
+  const [isCartEmpty, setCartEmpty] = React.useState(false);
 
   React.useEffect(() => {
-    const {cartTotal, stripeTotal} = calculateCartTotal(products);
+    const { cartTotal, stripeTotal } = calculateCartTotal(products);
     setCartAmount(cartTotal);
     setStripeAmount(stripeTotal);
     setCartEmpty(products.length === 0);
-  }, [products])
+  }, [products]);
 
   return (
     <>
@@ -28,13 +28,13 @@ function CartSummary({ products, handleCheckout, success }) {
           shippingAddress={true}
           billingAddress={true}
           zipCode={true}
+          stripeKey="pk_test_t7RpkuOEdeYcNPrzs362Xe6Y00MxwtXekY"
           token={handleCheckout}
-          stripeKey="pk_test_51HWAacD80Qg28FJ9b20MS9R9E5YOg4nDfZxoeQQPdWRoacZtY19DFtfHYamC2qbXfs4JoKPNq52DUS77g8snRfbb00juQUvrJl"
           triggerEvent="onClick"
         >
           <Button
-            disabled={isCartEmpty || success}
             icon="cart"
+            disabled={isCartEmpty || success}
             color="teal"
             floated="right"
             content="Checkout"
